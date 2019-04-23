@@ -1,0 +1,29 @@
+apply plugin: 'groovy'
+apply plugin: 'maven'
+
+targetCompatibility = JavaVersion.VERSION_1_8
+sourceCompatibility = JavaVersion.VERSION_1_8
+
+dependencies {
+    implementation gradleApi()
+    implementation localGroovy()
+    implementation 'com.android.tools.build:gradle:3.3.2'
+    implementation 'org.aspectj:aspectjtools:1.9.3'
+    implementation 'org.aspectj:aspectjrt:1.9.3'
+}
+repositories {
+    jcenter()
+    mavenCentral()
+}
+
+group = 'com.cby.aop.aspectj_plugin'
+version = '1.0.0'
+
+uploadArchives {
+    // 使用当前目录下面的maven仓库，仓库在当前目录的repo文件目录中
+    repositories {
+        mavenDeployer {
+            repository(url: uri('../repo'))
+        }
+    }
+}
