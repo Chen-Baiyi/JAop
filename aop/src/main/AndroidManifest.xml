@@ -1,5 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.cby.aspectj">
 
-    <application />
+    <application >
+        <activity android:name=".util.PermissionUtils$PermissionActivity" />
+    </application>
 </manifest>

@@ -3,8 +3,8 @@ package com.cby.aspectj.aspectj;
 import android.util.Log;
 import android.view.View;
 
+import com.cby.aspectj.annotation.JSingleClick;
 import com.cby.aspectj.common.Constant;
-import com.cby.aspectj.annotation.SingleClick;
 import com.cby.aspectj.util.SingleClickUtil;
 import com.cby.aspectj.util.Utils;
 
@@ -18,7 +18,7 @@ public class SingleClickAspect {
     private static final long DEFAULT_TIME_INTERVAL = 5000;
 
 
-    @Pointcut("within(@com.cby.aspectj.annotation.SingleClick *)")
+    @Pointcut("within(@com.cby.aspectj.annotation.JSingleClick *)")
     public void withinAnnotatedClass() {
     }
 
@@ -30,7 +30,7 @@ public class SingleClickAspect {
      * 定义切点，标记切点为所有被@SingleClick注解的方法
      * 注意：execution(@注解类的全路径)
      */
-    @Pointcut("execution(@com.cby.aspectj.annotation.SingleClick * *(..)) || methodInsideAnnotatedType()")
+    @Pointcut("execution(@com.cby.aspectj.annotation.JSingleClick * *(..)) || methodInsideAnnotatedType()")
     public void method() {
     }  // 方法切入点
 
@@ -39,7 +39,7 @@ public class SingleClickAspect {
      * 定义一个切面方法，包裹切点方法
      */
     @Around("method() && @annotation(singleClick)") // 在连接点进行方法替换
-    public void aroundJoinPoint(ProceedingJoinPoint joinPoint, SingleClick singleClick) throws Throwable {
+    public void aroundJoinPoint(ProceedingJoinPoint joinPoint, JSingleClick singleClick) throws Throwable {
         // 取出方法的参数
         View view = null;
         for (Object arg : joinPoint.getArgs()) {
@@ -54,10 +54,10 @@ public class SingleClickAspect {
         // 取出方法的注解
 //        MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
 //        Method method = methodSignature.getMethod();
-//        if (!method.isAnnotationPresent(SingleClick.class)) {
+//        if (!method.isAnnotationPresent(JSingleClick.class)) {
 //            return;
 //        }
-//        SingleClick singleClick = method.getAnnotation(SingleClick.class);
+//        JSingleClick singleClick = method.getAnnotation(JSingleClick.class);
         // 判断是否快速点击
         if (!SingleClickUtil.isFastDoubleClick(view, singleClick.value())) {
             // 不是快速点击，执行原方法

@@ -3,7 +3,7 @@ package com.cby.aspectj.aspectj;
 import android.util.Log;
 
 import com.cby.aspectj.Aop;
-import com.cby.aspectj.annotation.Intercept;
+import com.cby.aspectj.annotation.JIntercept;
 import com.cby.aspectj.common.Constant;
 
 import org.aspectj.lang.JoinPoint;
@@ -19,37 +19,37 @@ public class InterceptAspect {
     // @Pointcut 切入点
 
     /**
-     * 带有 Intercept 注解的所有连接点
+     * 带有 JIntercept 注解的所有连接点
      */
-    @Pointcut("within(@com.cby.aspectj.annotation.Intercept *)")
+    @Pointcut("within(@com.cby.aspectj.annotation.JIntercept *)")
     public void withinAnnotatedClass() {
     }
 
     /**
-     * 带有 Intercept 注解的所有类，除去 synthetic 修饰的方法
+     * 带有 JIntercept 注解的所有类，除去 synthetic 修饰的方法
      */
     @Pointcut("execution(!synthetic * *(..)) && withinAnnotatedClass()")
     public void methodInsideAnnotatedType() {
     }
 
     /**
-     * 带有 Intercept 注解的所有类，除去 synthetic 修饰的构造方法
+     * 带有 JIntercept 注解的所有类，除去 synthetic 修饰的构造方法
      */
     @Pointcut("execution(!synthetic *.new(..)) && withinAnnotatedClass()")
     public void constructorInsideAnnotatedType() {
     }
 
     /**
-     * 带有 Intercept 注解的方法
+     * 带有 JIntercept 注解的方法
      */
-    @Pointcut("execution(@com.cby.aspectj.annotation.Intercept * *(..)) || methodInsideAnnotatedType()")
+    @Pointcut("execution(@com.cby.aspectj.annotation.JIntercept * *(..)) || methodInsideAnnotatedType()")
     public void method() {
     }
 
     /**
-     * 带有 Intercept 注解的构造方法
+     * 带有 JIntercept 注解的构造方法
      */
-    @Pointcut("execution(@com.cby.aspectj.annotation.Intercept *.new(..)) || constructorInsideAnnotatedType()")
+    @Pointcut("execution(@com.cby.aspectj.annotation.JIntercept *.new(..)) || constructorInsideAnnotatedType()")
     public void constructor() {
     }
 
@@ -64,7 +64,7 @@ public class InterceptAspect {
      * @Around 在原方法执行前后和抛出异常时执行（前面几种通知的综合）
      */
     @Around("(method() || constructor()) && @annotation(intercept)")    // 在连接点进行方法替换
-    public Object aroundJoinPoint(ProceedingJoinPoint joinPoint, Intercept intercept) throws Throwable {
+    public Object aroundJoinPoint(ProceedingJoinPoint joinPoint, JIntercept intercept) throws Throwable {
         if (Aop.getInterceptor() == null) return joinPoint.proceed(); // 没有拦截器不执行切片拦截
         // 执行拦截操作
         boolean result = proceedIntercept(intercept.value(), joinPoint);

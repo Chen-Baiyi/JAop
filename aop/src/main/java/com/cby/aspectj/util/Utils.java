@@ -31,13 +31,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-/**
- * <pre>
- *     desc   :
- *     author : xuexiang
- *     time   : 2018/4/22 下午10:11
- * </pre>
- */
 public final class Utils {
 
     private Utils() {

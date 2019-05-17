@@ -1,5 +1,6 @@
 package com.cby.jaop;
 
+import android.Manifest;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,8 +8,9 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.cby.aspectj.annotation.Intercept;
-import com.cby.aspectj.annotation.SingleClick;
+import com.cby.aspectj.annotation.JIntercept;
+import com.cby.aspectj.annotation.JPermission;
+import com.cby.aspectj.annotation.JSingleClick;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -33,7 +35,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     int i = 0;
-    @SingleClick(3000)
+
+    @JSingleClick(3000)
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -53,17 +56,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         textView.setText(i + "");
     }
 
-
-    @Intercept(JApplication.InterceptorType.TYPE_1)
+    @JIntercept(JApplication.InterceptorType.TYPE_1)
     private void toast() {
         Toast.makeText(this, "(～￣▽￣)～", Toast.LENGTH_SHORT).show();
     }
 
-    @Intercept(JApplication.InterceptorType.TYPE_0)
+    @JPermission({Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CALL_PHONE})
+//    @JIntercept(JApplication.InterceptorType.TYPE_0)
     private void login(String a) {
         startActivity(new Intent(this, SecondActivity.class));
     }
 
+    @JPermission({Manifest.permission.ACCESS_FINE_LOCATION})
     private void login2() {
         startActivity(new Intent(this, SecondActivity.class));
     }

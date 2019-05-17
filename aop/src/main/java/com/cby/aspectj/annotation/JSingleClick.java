@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface SingleClick {
+public @interface JSingleClick {
     // 默认值
     long value() default 1000;
 }
