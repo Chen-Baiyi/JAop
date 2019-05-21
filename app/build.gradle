@@ -1,9 +1,10 @@
 apply plugin: 'com.android.application'
 // aspectj 插件
-apply plugin: 'aspectj_plugin'
+apply plugin: 'aspectj-plugin'
 
 android {
     compileSdkVersion 28
+    buildToolsVersion "${BUILD_TOOL_VERSION}"
     defaultConfig {
         applicationId "com.cby.jaop"
         minSdkVersion 15
@@ -28,9 +29,8 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-    testImplementation 'junit:junit:4.12'
+    implementation  "com.android.support:appcompat-v7:${ANDROID_SUPPORT_VERSION}"
+    testImplementation "junit:junit:${JUNIT_VERSION}"
     //引入aspectj的依赖
     implementation project(':aop')
 }

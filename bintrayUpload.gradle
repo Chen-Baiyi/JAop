@@ -1,0 +1,124 @@
+// 这里添加下面两行代码。
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'maven'
+
+
+//添加这两行
+//apply plugin: 'com.github.dcendents.android-maven'
+//apply plugin: 'com.jfrog.bintray'
+
+//项目主页--项目的GitHub地址
+def siteUrl = 'https://github.com/Chen-Baiyi/JAop'
+//项目的git地址
+def gitUrl = 'https://github.com/Chen-Baiyi/JAop.git'
+
+//发布到JCenter上的项目名字，compile引用时的第2部分项目名
+def libName = "AspectjPlugin"
+//compile引用时的第1部分
+group = "com.cby.aop"
+// 版本号，//compile引用时的最后部分项目名，下次更新是只需要更改版本号即可
+version = "1.0.0"
+//上面配置后上传至JCenter后的编译路径是这样的： compile 'com.cby.aop:AspectjPlugin:1.0.1'
+
+//生成源文件
+task sourcesJar(type: Jar) {
+    from sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+//生成Javadoc文档
+//task javadoc(type: Javadoc) {
+//    source = android.sourceSets.main.java.srcDirs
+//    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+//    failOnError false // 忽略注释语法错误，如果用jdk1.8你的注释写的不规范就编译不过。
+//}
+
+//文档打包成jar
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+//拷贝javadoc文件
+task copyDoc(type: Copy) {
+    from "${buildDir}/docs/"
+    into "docs"
+}
+
+//上传到JCenter所需要的源码文件
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+// 配置maven库，生成POM.xml文件
+install {
+    repositories.mavenInstaller {
+        // This generates POM.xml with proper parameters
+        pom {
+            project {
+                packaging 'aar'
+                // 项目描述，自由填写
+                name 'A aop plugin on Android'
+                // 项目主页，这里是引用上面定义好。
+                url siteUrl
+                // 软件开源协议，现在一般都是Apache License2.0
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                // 开发者的个人信息，根据个人信息填写
+                developers {
+                    developer {
+                        id 'chen-baiyi'     // 开发者的id。
+                        name 'chen-baiyi'   // 开发者名字。
+                        email 'chen_weijiang@outlook.com' // 开发者邮箱。
+                    }
+                }
+                // SCM，
+                scm {
+                    connection gitUrl           // Git仓库地址。
+                    developerConnection gitUrl  // Git仓库地址。
+                    url siteUrl                 // 项目主页。
+                }
+            }
+        }
+    }
+}
+
+//上传到JCenter
+// 这里是读取Bintray相关的信息，我们上传项目到github上的时候会把gradle文件传上去，所以不要把帐号密码的信息直接写在这里，写在local.properties中，这里动态读取。
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+bintray {
+    user = properties.getProperty("bintray.user")    //读取 local.properties 文件里面的 bintray.user
+    key = properties.getProperty("bintray.apikey")   //读取 local.properties 文件里面的 bintray.apikey
+    configurations = ['archives']
+    pkg {
+        //这里的repo值必须要和你创建Maven仓库的时候的名字一样
+        repo = "maven"
+        //发布到JCenter上的项目名字
+        name = libName
+        //项目描述
+        desc = 'A aop plugin on Android'
+        websiteUrl = siteUrl
+        userOrg = user // Bintray的用户名
+        vcsUrl = gitUrl
+        licenses = ["Apache-2.0"]
+        publish = true
+    }
+}
+
+javadoc {
+    options {
+        //如果你的项目里面有中文注释的话，必须将格式设置为UTF-8，不然会出现乱码
+        encoding "UTF-8"
+        charSet 'UTF-8'
+        author true
+        version true
+        links "http://docs.oracle.com/javase/7/docs/api"
+    }
+}

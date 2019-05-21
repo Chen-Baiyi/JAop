@@ -1,0 +1,20 @@
+apply plugin: 'groovy'
+apply plugin: 'maven'
+
+targetCompatibility = JavaVersion.VERSION_1_8
+sourceCompatibility = JavaVersion.VERSION_1_8
+
+dependencies {
+    implementation gradleApi()
+    implementation localGroovy()
+    implementation 'com.android.tools.build:gradle:3.3.0'
+    implementation 'org.aspectj:aspectjtools:1.9.3'
+    implementation 'org.aspectj:aspectjrt:1.9.3'
+}
+repositories {
+    jcenter()
+    mavenCentral()
+}
+
+apply from: "../bintrayUpload.gradle"
+//apply from: "../localMaven.gradle"

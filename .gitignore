@@ -77,9 +77,5 @@ lint/tmp/
 # lint/reports/
 
 
-    # //bintray 的用户名
-    # bintrayUser = 'chen-baiyi'
-    # //API Key
-    # bintrayKey = "649d9e3c335d942b5829d6c673a6bd6008be4ace"
-    # dryRun = false
-# gradlew clean build bintrayUpload -PbintrayUser=chen-baiyi -PbintrayKey=649d9e3c335d942b5829d6c673a6bd6008be4ace -PdryRun=false
+
+

@@ -5,17 +5,8 @@ import android.app.Application;
 import android.content.Intent;
 import android.widget.Toast;
 
-
 import com.cby.aspectj.Aop;
-import com.cby.aspectj.common.Interceptor;
-import com.cby.aspectj.util.PermissionUtils;
 import com.cby.aspectj.util.Utils;
-
-import org.aspectj.lang.JoinPoint;
-
-import java.util.List;
-
-//import org.aspectj.lang.JoinPoint;
 
 @SuppressLint("Registered")
 public class JApplication extends Application {
@@ -38,7 +29,6 @@ public class JApplication extends Application {
     }
 
     private void init() {
-
         Aop.init(this);
         Aop.setInterceptor((type, joinPoint) -> {
             switch (type) {

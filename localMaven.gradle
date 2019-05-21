@@ -1,0 +1,18 @@
+apply plugin: 'maven'
+
+def groupName = 'com.cby.aop'
+def artifactName = 'aspectj-plugin'
+def versionName = '1.0.0'
+
+// 本地仓库发布
+uploadArchives {
+    // 使用当前目录下面的maven仓库，仓库在当前目录的repo文件目录中
+    repositories {
+        mavenDeployer {
+            pom.groupId = "${groupName}"
+            pom.artifactId = "${artifactName}"
+            pom.version = "${versionName}"
+            repository(url: uri('../repo'))
+        }
+    }
+}

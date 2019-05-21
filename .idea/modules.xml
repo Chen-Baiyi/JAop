@@ -5,7 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/JAop.iml" filepath="$PROJECT_DIR$/JAop.iml" />
       <module fileurl="file://$PROJECT_DIR$/aop/aop.iml" filepath="$PROJECT_DIR$/aop/aop.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/plugin/plugin.iml" filepath="$PROJECT_DIR$/plugin/plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/aspectj-plugin/aspectj-plugin.iml" filepath="$PROJECT_DIR$/aspectj-plugin/aspectj-plugin.iml" />
     </modules>
   </component>
 </project>

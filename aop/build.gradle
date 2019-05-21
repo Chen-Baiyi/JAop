@@ -1,10 +1,9 @@
 apply plugin: 'com.android.library'
 // aspectj 插件
-apply plugin: 'aspectj_plugin'
+apply plugin: 'aspectj-plugin'
 
 android {
     compileSdkVersion 28
-
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 28
