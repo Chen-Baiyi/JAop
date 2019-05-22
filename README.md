@@ -93,3 +93,16 @@ dependencies {
     private void method() {
     }
 ```
+
+#### 混淆
+```
+-keep @com.cby.aspectj.annotation.* class * {*;}
+-keep class * {
+    @com.cby.aspectj.annotation.* <fields>;
+}
+-keepclassmembers class * {
+    @com.cby.aspectj.annotation.* <methods>;
+}
+```
+
+[![](https://jitpack.io/v/Chen-Baiyi/JAop.svg)](https://jitpack.io/#Chen-Baiyi/JAop)
