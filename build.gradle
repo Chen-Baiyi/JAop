@@ -4,10 +4,10 @@ buildscript {
     repositories {
         google()
         jcenter()
-        maven {
-            url "https://dl.bintray.com/chen-baiyi/maven"
+//        maven {
+//            url "https://dl.bintray.com/chen-baiyi/maven"
 //            url "./repo"
-        }
+//        }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.3.1'

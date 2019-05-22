@@ -1,40 +1,95 @@
 # JAop
 
 #### 介绍
-Aop 之 aspectj：
-当前功能：
-1、点击事件防抖
-2、拦截器
+你可以通过添加注解的方式实现以下功能：
+1. 点击事件防抖
+2. 拦截
+3. 动态权限请求
 
-#### 软件架构
-软件架构说明
+#### 依赖
 
+1. 在项目下的 build.gradle 中添加如下依赖
+```
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        // aspectj 插件
+        classpath 'com.cby.aop:aspectj-plugin:1.0.0'
+    }
+}
 
-#### 安装教程
+allprojects {
+    repositories {
+        jcenter()
+        maven { url 'https://jitpack.io' }
+    }
+}	
+```
+2. 在 module 下的 build.gradle 中
+```
+// aspectj 插件
+apply plugin: 'aspectj-plugin'
+dependencies {
+    implementation 'com.github.Chen-Baiyi:JAop:1.0.0'
+}
+```
 
-1. xxxx
-2. xxxx
-3. xxxx
+#### 使用
 
-#### 使用说明
-
-1. xxxx
-2. xxxx
-3. xxxx
-
-#### 参与贡献
-
-1. Fork 本仓库
-2. 新建 Feat_xxx 分支
-3. 提交代码
-4. 新建 Pull Request
-
-
-#### 码云特技
-
-1. 使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2. 码云官方博客 [blog.gitee.com](https://blog.gitee.com)
-3. 你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解码云上的优秀开源项目
-4. [GVP](https://gitee.com/gvp) 全称是码云最有价值开源项目，是码云综合评定出的优秀开源项目
-5. 码云官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6. 码云封面人物是一档用来展示码云会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+1. 在Application的onCreate里初始化
+```
+    /**
+     * 初始化 Aop
+     */
+    private void initAop() {
+        // 初始化 aop
+        Aop.init(this);
+        // 配置拦截操作，拦截成功时 return true，否则 return false。
+        Aop.setInterceptor((type, joinPoint) -> {
+            switch (type) {
+                case 0:
+                    // 未登录拦截，前往登录
+                    if (!isLogin) {
+                        Intent intent = new Intent(instance.getApplicationContext(), LoginActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                        return true;
+                    }
+                case 1:
+                    // 拦截
+                    Toast.makeText(instance, "拦截消息", Toast.LENGTH_SHORT).show();
+                    return true;
+            }
+            return false;
+        });
+        // 配置权限拒绝的操作
+        Aop.setOnPermissionDeniedListener(permissionsDenied -> {
+            Toast.makeText(instance, "拒绝权限 -> " + Utils.listToString(permissionsDenied), Toast.LENGTH_SHORT).show();
+        });
+    }
+```
+2. 单击事件防抖
+在点击事件方法上添加注解 @JSingleClick
+```
+    // 默认1000ms
+    @JSingleClick(2000)
+    public void onClick(View v) {
+        
+    }
+```
+3. 权限申请
+在对应的方法上添加注解 @JPermission(String[])
+```
+    @JPermission({Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CALL_PHONE})
+    private void method() {
+    }
+```
+4. 拦截
+在对应的方法上添加注解 @JIntercept(int[])
+```
+    @JIntercept(0)
+    private void method() {
+    }
+```

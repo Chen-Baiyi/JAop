@@ -25,11 +25,17 @@ public class JApplication extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
-        init();
+        // 初始化 Aop
+        initAop();
     }
 
-    private void init() {
+    /**
+     * 初始化 Aop
+     */
+    private void initAop() {
+        // 初始化 aop
         Aop.init(this);
+        // 配置拦截操作，拦截成功时 return true，否则 return false。
         Aop.setInterceptor((type, joinPoint) -> {
             switch (type) {
                 case InterceptorType.TYPE_0:
@@ -52,12 +58,11 @@ public class JApplication extends Application {
                     // 拦截
 
                     break;
-
             }
             return false;
         });
-        Aop.setOnPermissionDeniedListener(permissionsDenied -> {
-            Toast.makeText(instance, "拒绝权限 -> " + Utils.listToString(permissionsDenied), Toast.LENGTH_SHORT).show();
-        });
+        // 配置权限拒绝的操作
+        Aop.setOnPermissionDeniedListener(permissionsDenied ->
+                Toast.makeText(instance, "拒绝权限 -> " + Utils.listToString(permissionsDenied), Toast.LENGTH_SHORT).show());
     }
 }

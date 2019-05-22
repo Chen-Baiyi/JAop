@@ -28,12 +28,12 @@ import java.util.Set;
 public final class PermissionUtils {
 
     private static final List<String> PERMISSIONS = getPermissions();
-    private static final String TAG = PermissionFragment.class.getSimpleName();
+    private static final String FRAGMENT_TAG = PermissionFragment.class.getSimpleName();
 
     private static PermissionUtils sInstance;
     private PermissionFragment mPermissionsFragment;
 
-    public OnRationaleListener mOnRationaleListener;
+    private OnRationaleListener mOnRationaleListener;
     private SimpleCallback mSimpleCallback;
     private FullCallback mFullCallback;
     private Set<String> mPermissions;
@@ -53,13 +53,14 @@ public final class PermissionUtils {
      * 永久拒绝的权限
      */
     private List<String> mPermissionsDeniedForever;
+    private FragmentManager fragmentManager;
 
     /**
      * 获取应用权限
      *
      * @return 清单文件中的权限列表
      */
-    public static List<String> getPermissions() {
+    private static List<String> getPermissions() {
         return getPermissions(Aop.getContext().getPackageName());
     }
 
@@ -69,7 +70,7 @@ public final class PermissionUtils {
      * @param packageName 包名
      * @return 清单文件中的权限列表
      */
-    public static List<String> getPermissions(final String packageName) {
+    private static List<String> getPermissions(final String packageName) {
         PackageManager pm = Aop.getContext().getPackageManager();
         try {
             return Arrays.asList(
@@ -103,15 +104,6 @@ public final class PermissionUtils {
                 == ContextCompat.checkSelfPermission(Aop.getContext(), permission);
     }
 
-    /**
-     * 打开应用具体设置
-     */
-    public static void openAppSettings() {
-        Intent intent = new Intent("android.settings.APPLICATION_DETAILS_SETTINGS");
-        intent.setData(Uri.parse("package:" + Aop.getContext().getPackageName()));
-        Aop.getContext().startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-    }
-
 
     private PermissionUtils(final String... permissions) {
         mPermissions = new LinkedHashSet<>();
@@ -127,49 +119,6 @@ public final class PermissionUtils {
         }
         sInstance = this;
     }
-
-
-    public PermissionUtils(@NonNull final FragmentActivity activity) {
-//        mPermissionsFragment = getLazySingleton(activity.getSupportFragmentManager());
-    }
-
-    public PermissionUtils(@NonNull final Fragment fragment) {
-//        mPermissionsFragment = getLazySingleton(fragment.getChildFragmentManager());
-    }
-
-    @NonNull
-//    private Lazy<PermissionFragment> getLazySingleton(@NonNull final FragmentManager fragmentManager) {
-//        return new Lazy<PermissionFragment>() {
-//
-//            private PermissionFragment fragment;
-//
-//            @Override
-//            public synchronized PermissionFragment get() {
-//                if (fragment == null) {
-//                    fragment = getPermissionsFragment(fragmentManager);
-//                }
-//                return fragment;
-//            }
-//        };
-//    }
-//
-//    private PermissionFragment getPermissionsFragment(@NonNull final FragmentManager fragmentManager) {
-//        PermissionFragment mPermissionsFragment = findPermissionsFragment(fragmentManager);
-//        boolean isNewInstance = mPermissionsFragment == null;
-//        if (isNewInstance) {
-//            mPermissionsFragment = new PermissionFragment();
-//            fragmentManager
-//                    .beginTransaction()
-//                    .add(mPermissionsFragment, TAG)
-//                    .commitNow();
-//        }
-//        return mPermissionsFragment;
-//    }
-//
-//    private PermissionFragment findPermissionsFragment(@NonNull final FragmentManager fragmentManager) {
-//        return (PermissionFragment) fragmentManager.findFragmentByTag(TAG);
-//    }
-
 
     /**
      * 设置请求权限
@@ -214,19 +163,13 @@ public final class PermissionUtils {
         return this;
     }
 
-
-    public void request(@NonNull final FragmentActivity activity) {
-        request(activity.getSupportFragmentManager());
-    }
-
-    public void request(@NonNull final Fragment fragment) {
-        request(fragment.getChildFragmentManager());
-    }
-
     /**
      * 开始请求
      */
     public void request(FragmentManager fragmentManager) {
+        if (fragmentManager == null) {
+            throw new RuntimeException("The context must to be an activity or a fragment.");
+        }
         mPermissionsGranted = new ArrayList<>();
         mPermissionsRequest = new ArrayList<>();
         // 判断 SDK 版本 【23（Android 6.0 系统）】 ==> 小于 23：不需要动态权限申请；大于 23：要动态权限申请
@@ -253,21 +196,32 @@ public final class PermissionUtils {
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void startPermissionFragment(FragmentManager fragmentManager) {
+        this.fragmentManager = fragmentManager;
         // 初始化拒绝、永久拒绝的权限集合
         mPermissionsDenied = new ArrayList<>();
         mPermissionsDeniedForever = new ArrayList<>();
         if (sInstance.mPermissionsRequest != null) {
             int size = sInstance.mPermissionsRequest.size();
-            // TODO: 2019/5/17 请求权限
-            if (mPermissionsFragment == null) {
-                mPermissionsFragment = new PermissionFragment();
-                fragmentManager
-                        .beginTransaction()
-                        .add(mPermissionsFragment, TAG)
-                        .commitNow();
-            }
+
+            mPermissionsFragment = getPermissionsFragment(fragmentManager);
             mPermissionsFragment.requestPermissions(sInstance.mPermissionsRequest.toArray(new String[size]));
         }
+    }
+
+    private PermissionFragment getPermissionsFragment(FragmentManager fragmentManager) {
+        PermissionFragment fragment = (PermissionFragment) findFragment(fragmentManager);
+        if (fragment == null) {
+            fragment = new PermissionFragment();
+            fragmentManager
+                    .beginTransaction()
+                    .add(fragment, FRAGMENT_TAG)
+                    .commitNow();
+        }
+        return fragment;
+    }
+
+    private Fragment findFragment(FragmentManager fragmentManager) {
+        return fragmentManager.findFragmentByTag(FRAGMENT_TAG);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -279,7 +233,7 @@ public final class PermissionUtils {
                     getPermissionsStatus(activity);
                     mOnRationaleListener.rationale(again -> {
                         if (again) {
-//                            startPermissionActivity();
+                            startPermissionFragment(fragmentManager);
                         } else {
                             requestCallback();
                         }
@@ -345,7 +299,7 @@ public final class PermissionUtils {
             /**
              * 是否需要重新请求权限
              *
-             * @param again
+             * @param again true 要，false 不要
              */
             void again(boolean again);
         }
@@ -385,7 +339,7 @@ public final class PermissionUtils {
     /**
      * 打开APP的通知权限设置界面
      *
-     * @param activity
+     * @param activity 活动
      */
     private static void openAppNotificationSettings(Activity activity) {
         Intent intent = new Intent();
@@ -393,6 +347,15 @@ public final class PermissionUtils {
         intent.putExtra("app_package", activity.getPackageName());
         intent.putExtra("app_uid", activity.getApplicationInfo().uid);
         activity.startActivity(intent);
+    }
+
+    /**
+     * 打开应用具体设置
+     */
+    public static void openAppSettings() {
+        Intent intent = new Intent("android.settings.APPLICATION_DETAILS_SETTINGS");
+        intent.setData(Uri.parse("package:" + Aop.getContext().getPackageName()));
+        Aop.getContext().startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 
     /**

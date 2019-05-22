@@ -57,11 +57,11 @@ public class InterceptAspect {
      * 执行
      * 【注】joinPoint.proceed() 表示执行原方法
      *
-     * @Before 在原方法执行之前执行要插入的代码
-     * @After 在原方法执行之后执行要插入的代码
-     * @AfterReturning 在原方法执行后，返回一个结果再执行，如果没结果，用此修辞符修辞是不会执行的
-     * @AfterThrowing 在原方法执行过程中抛出异常后执行，也就是方法执行过程中，如果抛出异常后，才会执行此切面方法。
-     * @Around 在原方法执行前后和抛出异常时执行（前面几种通知的综合）
+     * Before 在原方法执行之前执行要插入的代码
+     * After 在原方法执行之后执行要插入的代码
+     * AfterReturning 在原方法执行后，返回一个结果再执行，如果没结果，用此修辞符修辞是不会执行的
+     * AfterThrowing 在原方法执行过程中抛出异常后执行，也就是方法执行过程中，如果抛出异常后，才会执行此切面方法。
+     * Around 在原方法执行前后和抛出异常时执行（前面几种通知的综合）
      */
     @Around("(method() || constructor()) && @annotation(intercept)")    // 在连接点进行方法替换
     public Object aroundJoinPoint(ProceedingJoinPoint joinPoint, JIntercept intercept) throws Throwable {
@@ -87,5 +87,4 @@ public class InterceptAspect {
         }
         return false;
     }
-
 }

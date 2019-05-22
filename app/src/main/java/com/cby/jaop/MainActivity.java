@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     int i = 0;
 
+    // 默认1000ms
     @JSingleClick(3000)
     @Override
     public void onClick(View v) {
@@ -56,18 +57,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         textView.setText(i + "");
     }
 
+    // 拦截
     @JIntercept(JApplication.InterceptorType.TYPE_1)
     private void toast() {
         Toast.makeText(this, "(～￣▽￣)～", Toast.LENGTH_SHORT).show();
     }
 
+    // 权限申请+拦截
     @JPermission({Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CALL_PHONE})
-//    @JIntercept(JApplication.InterceptorType.TYPE_0)
+    @JIntercept(JApplication.InterceptorType.TYPE_0)
     private void login(String a) {
         startActivity(new Intent(this, SecondActivity.class));
     }
 
-    @JPermission({Manifest.permission.ACCESS_FINE_LOCATION})
+    // 权限申请
+    @JPermission(Manifest.permission.ACCESS_FINE_LOCATION)
     private void login2() {
         startActivity(new Intent(this, SecondActivity.class));
     }
