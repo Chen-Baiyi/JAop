@@ -33,5 +33,7 @@ dependencies {
     testImplementation "junit:junit:${JUNIT_VERSION}"
     //引入aspectj的依赖
     implementation project(':aop')
-//    implementation 'com.github.Chen-Baiyi:JAop:1.0.2'
+//    implementation 'com.github.Chen-Baiyi:JAop:1.0.3'
+//    implementation 'com.cby.aop:aspectj-plugin:1.0.1'
+//    annotationProcessor 'com.cby.aop:aspectj-plugin:1.0.1'
 }
