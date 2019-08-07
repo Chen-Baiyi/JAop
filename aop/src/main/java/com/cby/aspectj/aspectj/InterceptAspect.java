@@ -5,6 +5,7 @@ import android.util.Log;
 import com.cby.aspectj.Aop;
 import com.cby.aspectj.annotation.JIntercept;
 import com.cby.aspectj.common.Constant;
+import com.cby.aspectj.util.DebugLog;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -68,7 +69,7 @@ public class InterceptAspect {
         if (Aop.getInterceptor() == null) return joinPoint.proceed(); // 没有拦截器不执行切片拦截
         // 执行拦截操作
         boolean result = proceedIntercept(intercept.value(), joinPoint);
-        Log.d(Constant.TAG, "拦截结果:" + result + ", 切片" + (result ? "被拦截！" : "正常执行！"));
+        DebugLog.d( "拦截结果:" + result + ", 切片" + (result ? "被拦截！" : "正常执行！"));
         return result ? null : joinPoint.proceed();
     }
 

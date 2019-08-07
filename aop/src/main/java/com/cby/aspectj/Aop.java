@@ -5,6 +5,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.cby.aspectj.common.Interceptor;
+import com.cby.aspectj.util.DebugLog;
 import com.cby.aspectj.util.PermissionUtils;
 
 public class Aop {
@@ -20,6 +21,9 @@ public class Aop {
         mContext = application.getApplicationContext();
     }
 
+    public static void setDebug(boolean isDebug){
+        new DebugLog(isDebug);
+    }
 
     /**
      * 获取全局上下文

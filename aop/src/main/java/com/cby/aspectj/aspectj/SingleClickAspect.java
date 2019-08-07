@@ -5,6 +5,7 @@ import android.view.View;
 
 import com.cby.aspectj.annotation.JSingleClick;
 import com.cby.aspectj.common.Constant;
+import com.cby.aspectj.util.DebugLog;
 import com.cby.aspectj.util.SingleClickUtil;
 import com.cby.aspectj.util.Utils;
 
@@ -49,6 +50,8 @@ public class SingleClickAspect {
             }
         }
         if (view == null) {
+            // 未获取到控件，不做处理，执行原方法
+            joinPoint.proceed();
             return;
         }
         // 取出方法的注解
@@ -63,7 +66,7 @@ public class SingleClickAspect {
             // 不是快速点击，执行原方法
             joinPoint.proceed();
         } else {
-            Log.d(Constant.TAG, Utils.getMethodDescribeInfo(joinPoint) + ":发生快速点击，View id:" + view.getId());
+            DebugLog.d(Utils.getMethodDescribeInfo(joinPoint) + ":发生快速点击，View id:" + view.getId());
         }
     }
 }

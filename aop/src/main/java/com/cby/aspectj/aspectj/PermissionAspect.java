@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.cby.aspectj.Aop;
 import com.cby.aspectj.annotation.JPermission;
+import com.cby.aspectj.util.DebugLog;
 import com.cby.aspectj.util.PermissionUtils;
 import com.cby.aspectj.util.Utils;
 
@@ -59,7 +60,7 @@ public class PermissionAspect {
     /**
      * 执行
      * 【注】joinPoint.proceed() 表示执行原方法
-     *
+     * <p>
      * Before 在原方法执行之前执行要插入的代码
      * After 在原方法执行之后执行要插入的代码
      * AfterReturning 在原方法执行后，返回一个结果再执行，如果没结果，用此修辞符修辞是不会执行的
@@ -93,7 +94,7 @@ public class PermissionAspect {
 
                     @Override
                     public void onDenied(List<String> permissionsDeniedForever, List<String> permissionsDenied) {
-                        Log.e("aop -> ", "权限申请被拒绝:" + Utils.listToString(permissionsDenied));
+                        DebugLog.e("权限申请被拒绝:" + Utils.listToString(permissionsDenied));
                         if (Aop.getOnPermissionDeniedListener() != null) {
                             Aop.getOnPermissionDeniedListener().onDenied(permissionsDenied);
                         }
