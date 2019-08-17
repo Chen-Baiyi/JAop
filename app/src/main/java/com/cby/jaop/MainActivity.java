@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.cby.aspectj.annotation.JIntercept;
 import com.cby.aspectj.annotation.JPermission;
 import com.cby.aspectj.annotation.JSingleClick;
+import com.cby.aspectj.annotation.JTrace;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         init();
     }
 
+    @JTrace
     private void init() {
         findViewById(R.id.btn1).setOnClickListener(this);
         findViewById(R.id.btn2).setOnClickListener(this);
@@ -58,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     // 拦截
+    @JTrace
     @JIntercept(JApplication.InterceptorType.TYPE_1)
     private void toast() {
         Toast.makeText(this, "(～￣▽￣)～", Toast.LENGTH_SHORT).show();

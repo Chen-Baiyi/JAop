@@ -5,6 +5,7 @@
 1. 点击事件防抖
 2. 拦截
 3. 动态权限请求
+4. 性能监控
 
 #### 依赖
 
@@ -46,6 +47,8 @@ dependencies {
     private void initAop() {
         // 初始化 aop
         Aop.init(this);
+        // 开启 debug 模式
+        Aop.setDebug(true);
         // 配置拦截操作，拦截成功时 return true，否则 return false。
         Aop.setInterceptor((type, joinPoint) -> {
             switch (type) {

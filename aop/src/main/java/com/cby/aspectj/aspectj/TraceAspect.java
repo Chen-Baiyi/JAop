@@ -72,13 +72,13 @@ public class TraceAspect {
      * Around 在原方法执行前后和抛出异常时执行（前面几种通知的综合）
      */
     @Around("(method() || constructor()) && @annotation(trace)")    // 在连接点进行方法替换
-    public void aroundJoinPoint(final ProceedingJoinPoint joinPoint, JTrace trace) throws Throwable {
+    public Object aroundJoinPoint(final ProceedingJoinPoint joinPoint, JTrace trace) throws Throwable {
         // 实例化计时器
         StopWatch stopWatch = new StopWatch();
         // 开始计时
         stopWatch.start();
         // 执行原方法
-        joinPoint.proceed();
+        Object result = joinPoint.proceed();
         // 结束计时
         stopWatch.stop();
 
@@ -89,6 +89,7 @@ public class TraceAspect {
         String methodName = methodSignature.getName();
         // 打印日志
         DebugLog.d(className, buildLogMessage(methodName, stopWatch.getTotalTimeMillis()));
+        return result;
     }
 
     /**
@@ -101,7 +102,7 @@ public class TraceAspect {
         StringBuilder message = new StringBuilder();
         message.append("JTrace --> ")
                 .append(methodName)
-                .append("[")
+                .append(" [")
                 .append(totalTimeMillis)
                 .append("ms]");
         return message.toString();

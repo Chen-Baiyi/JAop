@@ -18,6 +18,7 @@ import android.support.v4.content.ContextCompat;
 
 import com.cby.aspectj.Aop;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -365,17 +366,25 @@ public final class PermissionUtils {
      */
     public static class PermissionFragment extends Fragment {
         private static final int PERMISSIONS_REQUEST_CODE = 42;
+        private WeakReference<PermissionUtils> utilsRefe;
 
         @Override
         public void onCreate(@Nullable Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setRetainInstance(true);
+            utilsRefe = new WeakReference<>(sInstance);
+        }
+
+        private boolean isNotNull() {
+            return utilsRefe != null && utilsRefe.get() != null;
         }
 
         @TargetApi(Build.VERSION_CODES.M)
         void requestPermissions(@NonNull String[] permissions) {
-            if (sInstance.mPermissionsRequest != null) {
-                requestPermissions(permissions, PERMISSIONS_REQUEST_CODE);
+            if (isNotNull()) {
+                if (utilsRefe.get().mPermissionsRequest != null) {
+                    requestPermissions(permissions, PERMISSIONS_REQUEST_CODE);
+                }
             }
         }
 
@@ -390,7 +399,9 @@ public final class PermissionUtils {
             if (fragmentActivity == null) {
                 throw new IllegalStateException("This fragment must be attached to an activity.");
             }
-            sInstance.onRequestPermissionsResult(fragmentActivity);
+            if (isNotNull()) {
+                utilsRefe.get().onRequestPermissionsResult(fragmentActivity);
+            }
         }
     }
 }

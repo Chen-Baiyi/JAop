@@ -9,8 +9,9 @@ import org.aspectj.lang.annotation.DeclarePrecedence;
  * @Time 2019/5/22 11:41
  */
 @Aspect
-@DeclarePrecedence("com.cby.aspectj.aspectj.SingleClickAspect," +
-        "com.cby.aspectj.aspectj.PermissionAspect," +
-        "com.cby.aspectj.aspectj.InterceptAspect")
+@DeclarePrecedence(
+        "com.cby.aspectj.aspectj.SingleClickAspect," +
+                "com.cby.aspectj.aspectj.InterceptAspect," +
+                "com.cby.aspectj.aspectj.PermissionAspect")
 public class Precedence {
 }
