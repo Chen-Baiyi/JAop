@@ -96,6 +96,13 @@ dependencies {
     private void method() {
     }
 ```
+5. 性能监控
+在对应的方法上添加注解 @JTrace
+```
+    @JTrace
+    private void method() {
+    }
+```
 
 #### 混淆
 ```
