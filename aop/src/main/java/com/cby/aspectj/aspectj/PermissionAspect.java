@@ -1,10 +1,8 @@
 package com.cby.aspectj.aspectj;
 
-import android.app.Activity;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.util.Log;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 
 import com.cby.aspectj.Aop;
 import com.cby.aspectj.annotation.JPermission;
@@ -68,7 +66,7 @@ public class PermissionAspect {
      * Around 在原方法执行前后和抛出异常时执行（前面几种通知的综合）
      */
     @Around("(method() || constructor()) && @annotation(permission)")    // 在连接点进行方法替换
-    public void aroundJoinPoint(final ProceedingJoinPoint joinPoint, JPermission permission) throws Throwable {
+    public void aroundJoinPoint(final ProceedingJoinPoint joinPoint, JPermission permission) {
         FragmentManager fragmentManager = null;
         // 根据当前上下文对象是，获取对应的 FragmentManager 对象
         if (joinPoint.getThis() instanceof Fragment) {

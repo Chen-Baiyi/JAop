@@ -1,8 +1,8 @@
 package com.cby.jaop;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentActivity;
 
 public class SecondActivity extends FragmentActivity {
     @Override

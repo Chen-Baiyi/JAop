@@ -2,7 +2,7 @@ package com.cby.aspectj.util;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.support.annotation.StringDef;
+import androidx.annotation.StringDef;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -60,7 +60,6 @@ public final class PermissionConsts {
     @StringDef({CALENDAR, CAMERA, CONTACTS, LOCATION, MICROPHONE, PHONE, SENSORS, SMS, STORAGE,})
     @Retention(RetentionPolicy.SOURCE)
     public @interface Permissions {
-
     }
 
     public static String[] getPermissions(@Permissions final String permission) {

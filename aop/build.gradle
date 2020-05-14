@@ -6,12 +6,12 @@ apply plugin: 'aspectj-plugin'
 group='com.github.Chen-Baiyi'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 28
-        versionCode 7
-        versionName "1.0.6"
+        targetSdkVersion 29
+        versionCode 8
+        versionName "1.1.0"
     }
 
     compileOptions {
@@ -22,6 +22,6 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'org.aspectj:aspectjrt:1.9.3'
 }

@@ -2,23 +2,25 @@ package com.cby.aspectj;
 
 import android.app.Application;
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.cby.aspectj.common.Interceptor;
 import com.cby.aspectj.util.DebugLog;
 import com.cby.aspectj.util.PermissionUtils;
 
-public class Aop {
+import java.lang.ref.WeakReference;
 
-    private static Context mContext;
+public class Aop {
     private static Interceptor mInterceptor;
+    private static WeakReference<Context> mContextWeakReference;
+
     /**
      * 权限申请被拒绝的监听
      */
     private static PermissionUtils.OnPermissionDeniedListener sOnPermissionDeniedListener;
 
     public static void init(Application application) {
-        mContext = application.getApplicationContext();
+        mContextWeakReference = new WeakReference<>(application.getApplicationContext());
     }
 
     public static void setDebug(boolean isDebug){
@@ -28,15 +30,15 @@ public class Aop {
     /**
      * 获取全局上下文
      *
-     * @return
+     * @return 上下文对象
      */
     public static Context getContext() {
         testInitialize();
-        return mContext;
+        return mContextWeakReference.get();
     }
 
     private static void testInitialize() {
-        if (mContext == null) {
+        if (mContextWeakReference.get() == null) {
             throw new ExceptionInInitializerError("请先在全局Application中调用 Aop.init() 初始化！");
         }
     }

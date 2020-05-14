@@ -7,6 +7,8 @@
 3. 动态权限请求
 4. 性能监控
 
+易适配 AndroidX
+
 #### 依赖
 
 1. 在项目下的 build.gradle 中添加如下依赖
@@ -33,7 +35,10 @@ allprojects {
 // aspectj 插件
 apply plugin: 'aspectj-plugin'
 dependencies {
-    implementation 'com.github.Chen-Baiyi:JAop:1.0.0'
+    // androidx 版
+    implementation 'com.github.Chen-Baiyi:JAop:1.1.0'
+    // support 版
+    // implementation 'com.github.Chen-Baiyi:JAop:1.0.6'
 }
 ```
 
