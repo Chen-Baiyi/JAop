@@ -56,13 +56,20 @@ dependencies {
         Aop.setDebug(true);
         // 配置拦截操作，拦截成功时 return true，否则 return false。
         Aop.setInterceptor((type, joinPoint) -> {
+               Object context = joinPoint.getThis();
+            Activity activity = null;
+            if (context instanceof FragmentActivity) {
+                activity = (Activity) context;
+            }
+            if (context instanceof Fragment) {
+                activity = ((Fragment) context).getActivity();
+            }
             switch (type) {
                 case 0:
                     // 未登录拦截，前往登录
                     if (!isLogin) {
-                        Intent intent = new Intent(instance.getApplicationContext(), LoginActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
+                        Intent intent = new Intent(activity, LoginActivity.class);
+                        activity.startActivity(intent);
                         return true;
                     }
                 case 1:
