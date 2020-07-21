@@ -56,7 +56,7 @@ dependencies {
         Aop.setDebug(true);
         // 配置拦截操作，拦截成功时 return true，否则 return false。
         Aop.setInterceptor((type, joinPoint) -> {
-               Object context = joinPoint.getThis();
+            Object context = joinPoint.getThis();
             Activity activity = null;
             if (context instanceof FragmentActivity) {
                 activity = (Activity) context;
